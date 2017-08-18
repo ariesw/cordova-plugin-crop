@@ -1,7 +1,8 @@
 /* global cordova */
 var crop = module.exports = function cropImage (success, fail, image, options) {
-  options = options || {}
-  options.quality = options.quality || 100
+  options = options || {};
+  options.quality = options.quality || 100;
+  options.keepingAspectRatio = options.keepingAspectRatio || false;
   return cordova.exec(success, fail, 'CropPlugin', 'cropImage', [image, options])
 }
 

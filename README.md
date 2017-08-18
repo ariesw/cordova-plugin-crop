@@ -1,101 +1,27 @@
 # cordova-plugin-crop
 
-> Crop an image in a Cordova app
+> This is just cordova-plugin-crop v0.4.0 with few changes which allow control crop mode via options.
 
+> Based on https://www.npmjs.com/package/cordova-plugin-crop-mod
+
+[![npm](https://img.shields.io/npm/v/cordova-plugin-crop.svg?style=flat-square)]() [![npm](https://img.shields.io/npm/l/cordova-plugin-crop.svg?style=flat-square)]()
 
 ## Install
 
 ```
-$ cordova plugin add --save cordova-plugin-crop
+$ cordova plugin add --save https://github.com/jeduan/cordova-plugin-crop
 ```
 
+## Changes
 
-## Usage
-
-```js
-plugins.crop(function success () {
-
-}, function fail () {
-
-}, '/path/to/image', options)
 ```
-
-or, if you are running on an environment that supports Promises
-(Crosswalk, Android >= KitKat, iOS >= 8)
-
-```js
-plugins.crop.promise('/path/to/image', options)
-.then(function success (newPath) {
-
-})
-.catch(function fail (err) {
-
-})
+options.keepingAspectRatio = true; // Default value is "false"
 ```
-
-## API
-
- * quality: Number
-
-The resulting JPEG quality. default: 100
-
-## Ionic / Typescript Example Angular 2 Service
-
-<img src="screenshot-example.png" width="250" height="500">
-
-This is an example service that uses ionic-native's built in camera and the cordova-plugin-crop to create a cropped version of the image and return the file path. 
-
-```js
-import { Injectable } from '@angular/core';
-import { Platform } from 'ionic-angular';
-import { Camera, Crop } from 'ionic-native';
-
-@Injectable()
-export class CameraService {
-
-  public options: any = {
-        allowEdit: true,
-        sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
-        mediaType: Camera.MediaType.ALLMEDIA,
-        destinationType: Camera.DestinationType.FILE_URI
-  }
-  
-  constructor(public platform: Platform) {}
-
-  // Return a promise to catch errors while loading image
-  getMedia(): Promise<any> {
-    // Get Image from ionic-native's built in camera plugin
-    return Camera.getPicture(this.options)
-      .then((fileUri) => {
-        // Crop Image, on android this returns something like, '/storage/emulated/0/Android/...'
-        // Only giving an android example as ionic-native camera has built in cropping ability
-        if (this.platform.is('ios')) {
-          return fileUri
-        } else if (this.platform.is('android')) {
-          // Modify fileUri format, may not always be necessary
-          fileUri = 'file://' + fileUri;
-
-          /* Using cordova-plugin-crop starts here */
-          return Crop.crop(fileUri, { quality: 100 });
-        }
-      })
-      .then((path) => {
-        // path looks like 'file:///storage/emulated/0/Android/data/com.foo.bar/cache/1477008080626-cropped.jpg?1477008106566'
-        console.log('Cropped Image Path!: ' + path);
-        return path;
-      })
-  }
-  
-}  
-```
-
-
-
+![keepingAspectRatio=false](https://img.shields.io/badge/keepingAspectRatio-false-orange.svg?style=flat-square) |  ![keepingAspectRatio=true](https://img.shields.io/badge/keepingAspectRatio-true-green.svg?style=flat-square)
+--- | ---
+![keepingAspectRatio=false](https://i.imgur.com/OUblUsM.png)  | ![keepingAspectRatio=true](https://i.imgur.com/S3nc199.png)
 ### Libraries used
 
+ * Source: [cordova-plugin-crop ](https://www.npmjs.com/package/cordova-plugin-crop)
  * iOS: [PEPhotoCropEditor](https://github.com/kishikawakatsumi/PEPhotoCropEditor)
  * Android: [android-crop](https://github.com/jdamcd/android-crop)
-
-## License
-
-MIT © [Jeduan Cornejo](https://github.com/jeduan)

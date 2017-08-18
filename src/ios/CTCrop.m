@@ -5,6 +5,7 @@
 @interface CTCrop ()
 @property (copy) NSString* callbackId;
 @property (assign) NSUInteger quality;
+@property (assign) BOOL keepingAspectRatio;
 @end
 
 @implementation CTCrop
@@ -15,6 +16,8 @@
     NSDictionary *options = [command.arguments objectAtIndex:1];
     
     self.quality = options[@"quality"] ? [options[@"quality"] intValue] : 100;
+    self.keepingAspectRatio = options[@"keepingAspectRatio"] ? [options[@"keepingAspectRatio"] boolValue] : NO;
+    
     NSString *filePrefix = @"file://";
     
     if ([imagePath hasPrefix:filePrefix]) {
@@ -41,7 +44,7 @@
     CGFloat length = MIN(width, height);
     cropController.toolbarHidden = YES;
     cropController.rotationEnabled = NO;
-    cropController.keepingCropAspectRatio = YES;
+    cropController.keepingCropAspectRatio = self.keepingAspectRatio;
     
     cropController.imageCropRect = CGRectMake((width - length) / 2,
                                               (height - length) / 2,
